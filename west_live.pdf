@@ -1,0 +1,579 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# importing all modules\n",
+    "\n",
+    "import matplotlib, csv, pandas, sys, os, random\n",
+    "from matplotlib import pyplot as plt\n",
+    "from matplotlib.lines import Line2D\n",
+    "import matplotlib.image as mpimg\n",
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from pandas import DataFrame, Series\n",
+    "import matplotlib.pyplot as plt\n",
+    "%matplotlib inline"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# defining a function that will make the plots look nice\n",
+    "\n",
+    "def get_ax(figsize=(8, 6)):\n",
+    "    fig, ax = plt.subplots(figsize=figsize)\n",
+    "    ax.spines['right'].set_visible(False)\n",
+    "    ax.spines['top'].set_visible(False)\n",
+    "    return ax"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "c:\\users\\tente\\appdata\\local\\programs\\python\\python38-32\\lib\\site-packages\\IPython\\core\\interactiveshell.py:3145: DtypeWarning: Columns (8,9) have mixed types.Specify dtype option on import or set low_memory=False.\n",
+      "  has_raised = await self.run_ast_nodes(code_ast.body, cell_name,\n"
+     ]
+    }
+   ],
+   "source": [
+    "# turning the spreadsheet into a 'dataframe'\n",
+    "\n",
+    "all_data = pandas.read_csv(r\"C:\\Users\\tente\\OneDrive\\Documents\\CS638\\Madison 1994 - Aug 2020.csv\", encoding='latin-1')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (1) look at the data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Goal: look at how many collisions, injuries and fatalities occured at each road\n",
+    "# eg: S GAMMON RD -> {collisions -> number, injuries -> number, fatalites -> number}\n",
+    "\n",
+    "# (2) create a dictionary with roads as the keys, dictionary of collisions ... as values\n",
+    "road_dict = {}\n",
+    "\n",
+    "# (3) loop over the all of the data streets, injury number and fatality number\n",
+    "for i, row in all_data[[~columns~]].iterrows():\n",
+    "    \n",
+    "    # (4) get the data points as variables\n",
+    "    street1 = row[~number~]\n",
+    "    street2 = row[~number~]\n",
+    "    num_inj = row[~number~]\n",
+    "    num_fatl = row[~number~]\n",
+    "    \n",
+    "    # (5) new street -> create new dict\n",
+    "    if street1 not in road_dict:\n",
+    "        road_dict[street1] = {}\n",
+    "        road_dict[street1]['Collisions'] = ~number~\n",
+    "        road_dict[street1]['Injuries'] = ~number~\n",
+    "        road_dict[street1]['Fatalities'] = ~number~\n",
+    "    \n",
+    "    # (6) not new street -> change existing dict\n",
+    "    else:\n",
+    "        road_dict[street1]['Collisions'] += ~number~\n",
+    "        road_dict[street1]['Injuries'] += ~number~\n",
+    "        road_dict[street1]['Fatalities'] += ~number~\n",
+    "    \n",
+    "    # (7) new street -> create new dict\n",
+    "    if street2 not in road_dict:\n",
+    "        road_dict[street2] = {}\n",
+    "        road_dict[street2]['Collisions'] = ~number~\n",
+    "        road_dict[street2]['Injuries'] = ~number~\n",
+    "        road_dict[street2]['Fatalities'] = ~number~\n",
+    "    \n",
+    "    # (8) not new street -> change the dict\n",
+    "    else:\n",
+    "        road_dict[street2]['Collisions'] += ~number~\n",
+    "        road_dict[street2]['Injuries'] += ~number~\n",
+    "        road_dict[street2]['Fatalities'] += ~number~"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (9) turn the dict of dicts into a dataframe\n",
+    "\n",
+    "road_df = DataFrame.from_dict(road_dict, orient='index')\n",
+    "road_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (10) sort the df by number of collisions\n",
+    "\n",
+    "road_df = road_df.sort_values(by=~column name~, ascending=~T/F~)\n",
+    "road_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (11) get rid of bad / unhelpful data\n",
+    "\n",
+    "road_df = road_df.tail(~neg number~)\n",
+    "road_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (12) look at top 10\n",
+    "\n",
+    "road_df = road_df.head(~number~)\n",
+    "road_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (13) set units to be 1000s\n",
+    "\n",
+    "road_df['Collisions'] = ~itself~ / 1000\n",
+    "road_df['Injuries'] = ~itself~ / 1000\n",
+    "road_df['Fatalities'] = ~itself~ / 1000\n",
+    "\n",
+    "road_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (14) plot the data\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df.plot.bar(ax=ax)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (15) horizontal\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df.plot.bar~letter~(ax=ax)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (16) horizontal with e wash on top\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (17) increase font size\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax)\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "plt.xticks(size=)\n",
+    "plt.yticks(size=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (18) grey scale\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax, color=~list of colors~)\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "plt.xticks(size=)\n",
+    "plt.yticks(size=)\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (19) stacked\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax, color=~list of colors~, stacked=~T/F~)\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "plt.xticks(size=)\n",
+    "plt.yticks(size=)\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (20) custom x-ticks\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax, color=~list of colors~, stacked=~T/F~)\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "plt.xticks(~list of x ticks~, size=)\n",
+    "plt.yticks(size=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (21) label\n",
+    "\n",
+    "ax=get_ax()\n",
+    "road_df = road_df.sort_values(by=~column name~)\n",
+    "road_df.plot.barh(ax=ax, color=~list of colors~, stacked=~T/F~)\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "plt.xticks(~list of x ticks~, size=)\n",
+    "plt.yticks(size=)\n",
+    "\n",
+    "ax.set_xlabel(~label~, size=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#all_data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Goal same as before but with year as the key not streets\n",
+    "\n",
+    "# (22) create the dict\n",
+    "year_dict = {}\n",
+    "\n",
+    "# (23) loop over the data set\n",
+    "for i, row in all_data[[~columns~]].iterrows():\n",
+    "    # (24) get data as variables\n",
+    "    date = row[~index~]\n",
+    "    year = int(date[~index~])\n",
+    "    num_inj = row[~index~]\n",
+    "    num_fatl = row[~index~]\n",
+    "    \n",
+    "    # (25) new year -> create new dict\n",
+    "    if year not in year_dict:\n",
+    "        year_dict[year] = {}\n",
+    "        year_dict[year]['Collisions'] = ~number~\n",
+    "        year_dict[year]['Injuries'] = ~number~\n",
+    "        year_dict[year]['Fatalities'] = ~number~\n",
+    "    \n",
+    "    # (26) not new year -> change existing dict\n",
+    "    else:\n",
+    "        year_dict[year]['Collisions'] += ~number~\n",
+    "        year_dict[year]['Injuries'] += ~number~\n",
+    "        year_dict[year]['Fatalities'] += ~number~        "
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (27) turn into a dataframe\n",
+    "\n",
+    "year_df = DataFrame.from_dict(year_dict, orient='index')\n",
+    "year_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (28) sort chronologically\n",
+    "\n",
+    "year_df = year_df.sort_index()\n",
+    "year_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (29) plot the data\n",
+    "\n",
+    "ax=get_ax()\n",
+    "year_df.plot(ax=ax)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (30) make it look nicer\n",
+    "\n",
+    "year_df['Collisions'] = ~iself~ / 1000\n",
+    "year_df['Injuries'] = ~iself~ / 1000\n",
+    "year_df['Fatalities'] = ~iself~ / 1000\n",
+    "\n",
+    "ax=get_ax()\n",
+    "year_df['Collisions'].plot(ax=ax, color=)\n",
+    "year_df['Injuries'].plot(ax=ax, color=, style=)\n",
+    "year_df['Fatalities'].plot(ax=ax, color=, style=)\n",
+    "\n",
+    "plt.xticks(size=)\n",
+    "ax.set_xlabel(~label~, size=)\n",
+    "ax.set_ylabel(~label~, size=)\n",
+    "plt.yticks(size=)\n",
+    "\n",
+    "\n",
+    "ax.legend(fontsize=)\n",
+    "\n",
+    "plt.tight_layout()\n",
+    "\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# Goal: produce a plot that predicts the number of injuries prevented with 5% reduction in collisions\n",
+    "\n",
+    "# (31) add injury rate column to year_df\n",
+    "year_df['Injury Rate'] = ~injury column~ / collision column\n",
+    "year_df"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (32) create an injury sim df\n",
+    "injsim_df = \n",
+    "# (33) get the years df out of units of thousands\n",
+    "year_df['Collisions'] = ~itself~ * 1000\n",
+    "year_df['Injuries'] = ~itself~ * 1000\n",
+    "year_df['Fatalities'] = ~itself~ * 1000\n",
+    "\n",
+    "# (34) create lists that we can pull random values from\n",
+    "injrate_lst = list(~df injury rate column~)\n",
+    "colnum_lst = list(~df collision column~)\n",
+    "\n",
+    "# (35) take a random number of collisions and multiply by a random injury rate 1000 times\n",
+    "for i in range(~number~):\n",
+    "    # (36) 10 year projection\n",
+    "    rates = random.choices(~list of possible choices~, k=~number of picks~)\n",
+    "    collisions = random.choices(~list of possible choices~, k=~number of picks~)\n",
+    "    \n",
+    "    # get random num of injuries\n",
+    "    injnums = Series(~number of collisions~) * Series(~injury rate~)\n",
+    "    \n",
+    "    # same as above but with 5% fewer collisions\n",
+    "    injnums95 = Series(~number of collisions~) * Series(~injury rate~) * 0.95\n",
+    "    \n",
+    "    # add the difference to the df\n",
+    "    injsim_df['sim diff' + str(i)] = Series(~difference btwn normal and reduced~).cumsum()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 89,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (40) get rid of empty values\n",
+    "injsim_df = injsim_df.head(~number~)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 100,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# want to find the 5th, 95th percentiles and the median and plot those\n",
+    "\n",
+    "# (41) start the lists at 0\n",
+    "upper_lst = \n",
+    "med_lst = \n",
+    "lower_lst = \n",
+    "year_lst = \n",
+    "\n",
+    "# (42) loop through injsim_df and find the values\n",
+    "for i in range(~length of injury sim df~):\n",
+    "    year_lst.append(i + 1)\n",
+    "    # (43) find percentiles and median\n",
+    "    upper_lst.append(np.percentile(~df integer location of i~, ~number~))\n",
+    "    med_lst.append(~df integer location of i~.median())\n",
+    "    lower_lst.append(np.percentile(~df integer location of i~, ~number~))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (44) plot\n",
+    "\n",
+    "ax=get_ax()\n",
+    "\n",
+    "plt.plot(~x~, ~y~, color=)\n",
+    "plt.plot(~x~, ~y~, color=)\n",
+    "plt.plot(~x~, ~y~, color=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (45) fill between the 5th, 95th percentiles\n",
+    "\n",
+    "ax=get_ax()\n",
+    "\n",
+    "plt.plot(~x~, ~y~, color=)\n",
+    "plt.fill_between(~x~, ~lower y~, ~upper y~, color=, alpha=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# (46) make it look nice\n",
+    "\n",
+    "ax=get_ax()\n",
+    "\n",
+    "plt.plot(~x~, ~y~, color=)\n",
+    "plt.fill_between(~x~, ~lower y~, ~upper y~, color=, alpha=)\n",
+    "\n",
+    "plt.xticks(size=)\n",
+    "plt.yticks(size=)\n",
+    "\n",
+    "plt.xlabel(~label~, size=)\n",
+    "plt.ylabel(~label~, size=)\n",
+    "\n",
+    "plt.tight_layout()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.8.5"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
